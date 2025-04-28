@@ -150,96 +150,297 @@
           <input type="hidden" id="token" value="<?php echo $_SESSION['token']; ?>">
           <!-- CHARTS STARTS HERE -->
           <div class="body">
-              <canvas id="myChart" width="400px"></canvas>
-          </div>
-          <div class="analysis-guide">
-            <style>
-                table {
-                    border-collapse: collapse;
-                    width: 100%;
-                }
+    <canvas id="myChart" width="400px"></canvas>
+</div>
+<div class="analysis-guide">
+    <style>
+        .analysis-guide {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
         
-                th, td {
-                    border: 1px solid black;
-                    padding: 2px;
-                    color: black;
-                    font-weight: 900.;
-                }
+        .guide-title {
+            text-align: center;
+            font-style: italic;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            margin-top: 20px;
+            color: #d9534f;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .section-title:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 70%;
+            width: 4px;
+            background: #d9534f;
+            border-radius: 2px;
+        }
+        
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            margin: 15px 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        table:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        th, td {
+            padding: 10px 5px;
+            text-align: center;
+            border: none;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        th {
+            background: #343a40;
+            color: white;
+            font-weight: 700;
+        }
+        
+        td {
+            background: white;
+            color: #495057;
+        }
+        
+        tr:nth-child(even) td {
+            background: #f8f9fa;
+        }
+        
+        /* Animation for table cells */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        td {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Different delays for each cell to create a staggered effect */
+        td:nth-child(1) { animation-delay: 0.1s; }
+        td:nth-child(2) { animation-delay: 0.2s; }
+        td:nth-child(3) { animation-delay: 0.3s; }
+        td:nth-child(4) { animation-delay: 0.4s; }
+        td:nth-child(5) { animation-delay: 0.5s; }
+        td:nth-child(6) { animation-delay: 0.6s; }
+        td:nth-child(7) { animation-delay: 0.7s; }
+        td:nth-child(8) { animation-delay: 0.8s; }
+        
+        /* Highlight effect for percentages */
+        td.high-percentage {
+            color: #28a745;
+            font-weight: 700;
+        }
+        
+        td.low-percentage {
+            color: #dc3545;
+            font-weight: 700;
+        }
+        
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
+    <div class="guide-title">Guide for Over/Under</div>
+
+    <div class="section-title">OVER</div>
+    <table id="over-table">
+        <tr>
+            <th class="tooltip">1<span class="tooltiptext">Highest probability</span></th>
+            <th class="tooltip">2<span class="tooltiptext">Very high probability</span></th>
+            <th class="tooltip">3<span class="tooltiptext">High probability</span></th>
+            <th class="tooltip">4<span class="tooltiptext">Moderate probability</span></th>
+            <th class="tooltip">5<span class="tooltiptext">Balanced probability</span></th>
+            <th class="tooltip">6<span class="tooltiptext">Low probability</span></th>
+            <th class="tooltip">7<span class="tooltiptext">Very low probability</span></th>
+            <th class="tooltip">8<span class="tooltiptext">Lowest probability</span></th>
+        </tr>
+        <tr>
+            <td class="high-percentage">90%</td>
+            <td class="high-percentage">85%</td>
+            <td>70%</td>
+            <td>60%</td>
+            <td>55%</td>
+            <td class="low-percentage">40%</td>
+            <td class="low-percentage">30%</td>
+            <td class="low-percentage">25%</td>
+        </tr>
+    </table>
+
+    <div class="section-title">UNDER</div>
+    <table id="under-table">
+        <tr>
+            <th class="tooltip">1<span class="tooltiptext">Lowest probability</span></th>
+            <th class="tooltip">2<span class="tooltiptext">Very low probability</span></th>
+            <th class="tooltip">3<span class="tooltiptext">Low probability</span></th>
+            <th class="tooltip">4<span class="tooltiptext">Balanced probability</span></th>
+            <th class="tooltip">5<span class="tooltiptext">Moderate probability</span></th>
+            <th class="tooltip">6<span class="tooltiptext">High probability</span></th>
+            <th class="tooltip">7<span class="tooltiptext">Very high probability</span></th>
+            <th class="tooltip">8<span class="tooltiptext">Highest probability</span></th>
+        </tr>
+        <tr>
+            <td class="low-percentage">25%</td>
+            <td class="low-percentage">30%</td>
+            <td class="low-percentage">40%</td>
+            <td>55%</td>
+            <td>60%</td>
+            <td class="high-percentage">70%</td>
+            <td class="high-percentage">85%</td>
+            <td class="high-percentage">90%</td>
+        </tr>
+    </table>
+
+    <div class="section-title">Other Indicators</div>
+    <table id="indicators-table">
+        <tr>
+            <th class="tooltip">Even<span class="tooltiptext">Even number probability</span></th>
+            <th class="tooltip">Odd<span class="tooltiptext">Odd number probability</span></th>
+            <th class="tooltip">Rise<span class="tooltiptext">Rising trend probability</span></th>
+            <th class="tooltip">Fall<span class="tooltiptext">Falling trend probability</span></th>
+        </tr>
+        <tr>
+            <td class="high-percentage">Above 65%</td>
+            <td class="high-percentage">Above 65%</td>
+            <td class="high-percentage">Above 65%</td>
+            <td class="high-percentage">Above 65%</td>
+        </tr>
+    </table>
+
+    <script>
+        // Add interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const tables = document.querySelectorAll('table');
+            
+            // Add hover effect to cells
+            tables.forEach(table => {
+                const cells = table.querySelectorAll('td');
                 
-                h4 {
-                    margin-top: 14px;
-                    color: red;
-                }
-
-            </style>
-
-            <span class="text-center" style="font-style: italic; font-size: 16px; color: black;">Guide for Over/Under</span>
-
-
-
-            <h4>OVER</h4>
-            <table>
-                <tr>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
-                    <th>4</th>
-                    <th>5</th>
-                    <th>6</th>
-                    <th>7</th>
-                    <th>8</th>
-                </tr>
-                <tr>
-                    <td>90%</td>
-                    <td>85%</td>
-                    <td>70%</td>
-                    <td>60%</td>
-                    <td>55%</td>
-                    <td>40%</td>
-                    <td>30%</td>
-                    <td>25%</td>
-                </tr>
-            </table>
+                cells.forEach(cell => {
+                    cell.addEventListener('mouseenter', function() {
+                        this.style.transform = 'scale(1.05)';
+                        this.style.transition = 'transform 0.2s ease';
+                        this.style.zIndex = '10';
+                        this.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+                    });
+                    
+                    cell.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                        this.style.boxShadow = 'none';
+                    });
+                });
+            });
+            
+            // Add click effect to highlight important percentages
+            const importantCells = document.querySelectorAll('.high-percentage, .low-percentage');
+            
+            importantCells.forEach(cell => {
+                cell.addEventListener('click', function() {
+                    this.classList.toggle('pulse');
+                    
+                    // Remove pulse class after animation completes
+                    setTimeout(() => {
+                        this.classList.remove('pulse');
+                    }, 1000);
+                });
+            });
+            
+            // Add animation to section titles when they come into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInLeft 0.5s ease forwards';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.section-title').forEach(title => {
+                observer.observe(title);
+            });
+        });
+    </script>
+    
+    <style>
+        /* Additional animation for section titles */
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
         
-            <h4>UNDER</h4>
-            <table>
-                <tr>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
-                  <th>6</th>
-                  <th>7</th>
-                  <th>8</th>
-                </tr>
-                <tr>
-                    <td>25%</td>
-                    <td>30%</td>
-                    <td>40%</td>
-                    <td>55%</td>
-                    <td>60%</td>
-                    <td>70%</td>
-                    <td>85%</td>
-                    <td>90%</td>
-                </tr>
-            </table>
-            <br>
-            <table>
-              <tr>
-                <th>Even</th>
-                <th>Odd</th>
-                <th>Rise</th>
-                <th>Fall</th>
-              </tr>
-              <tr>
-                  <td>Above 65%</td>
-                  <td>Above 65%</td>
-                  <td>Above 65%</td>
-                  <td>Above 65%</td>
-              </tr>
-          </table>
-        </div>
+        /* Pulse animation for clicked cells */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+    </style>
+</div>
         
   			</div>
   		</div>
