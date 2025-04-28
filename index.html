@@ -14,319 +14,344 @@
 <link rel="manifest" href="_manifest.json">
 <meta id="theme-check" name="theme-color" content="#FFFFFF">
 <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+<style>
+  body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    min-height: 100vh;
+  }
+  
+  .page-content {
+    background-color: transparent !important;
+  }
+  
+  .card-style {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border: none;
+    overflow: hidden;
+  }
+</style>
 <script>
-            // Disable right-click
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
+  // Disable right-click
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-        function ctrlShiftKey(e, keyCode) {
-        return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
-        }
+  function ctrlShiftKey(e, keyCode) {
+    return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+  }
 
-        document.onkeydown = (e) => {
-        // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-        if (
-            event.keyCode === 123 ||
-            ctrlShiftKey(e, 'I') ||
-            ctrlShiftKey(e, 'J') ||
-            ctrlShiftKey(e, 'C') ||
-            (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
-        )
-            return false;
-        };
+  document.onkeydown = (e) => {
+    // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+    if (
+      event.keyCode === 123 ||
+      ctrlShiftKey(e, 'I') ||
+      ctrlShiftKey(e, 'J') ||
+      ctrlShiftKey(e, 'C') ||
+      (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+    )
+      return false;
+  };
 </script>
 </head>
 
 <body onload="changeMarket()">
 
 <div id="page">
-    <!-- Your Page Content Goes Here-->
     <div class="page-content header-clear-medium">
-      <div class="content" id="page_content">
+      <div class="content card-style" id="page_content">
         <br>
-          <div class="form-custom form-label form-icon mb-3">
-            <i class="bi bi-bar-chart-fill font-13"></i>
-            <select class="form-select rounded-xs" id="market" onchange="changeMarket()">
-              <option value="R_10" selected>Volatility 10</option>
-              <option value="1HZ10V">Volatility 10 (1s)</option>
-              <option value="R_25">Volatility 25</option>
-              <option value="1HZ25V">Volatility 25 (1s)</option>
-              <option value="R_50">Volatility 50</option>
-              <option value="1HZ50V">Volatility 50 (1s)</option>
-              <option value="R_75">Volatility 75</option>
-              <option value="1HZ75V">Volatility 75 (1s)</option>
-              <option value="R_100">Volatility 100</option>
-              <option value="1HZ100V">Volatility 100 (1s)</option>
-              <option value="JD10">Jump Index 10</option>
-              <option value="JD25">Jump Index 25</option>
-              <option value="JD50">Jump Index 50</option>
-              <option value="JD75">Jump Index 75</option>
-              <option value="JD100">Jump Index 100</option>
-              <option value="RDBEAR">Bear Market</option>
-              <option value="RDBULL">Bull Market</option>
-            </select>
-            <label for="market" class="color-theme form-label-active">Select a Synthetic Market</label>
+        <div class="form-custom form-label form-icon mb-3">
+          <i class="bi bi-bar-chart-fill font-13"></i>
+          <select class="form-select rounded-xs" id="market" onchange="changeMarket()">
+            <option value="R_10" selected>Volatility 10</option>
+            <option value="1HZ10V">Volatility 10 (1s)</option>
+            <option value="R_25">Volatility 25</option>
+            <option value="1HZ25V">Volatility 25 (1s)</option>
+            <option value="R_50">Volatility 50</option>
+            <option value="1HZ50V">Volatility 50 (1s)</option>
+            <option value="R_75">Volatility 75</option>
+            <option value="1HZ75V">Volatility 75 (1s)</option>
+            <option value="R_100">Volatility 100</option>
+            <option value="1HZ100V">Volatility 100 (1s)</option>
+            <option value="JD10">Jump Index 10</option>
+            <option value="JD25">Jump Index 25</option>
+            <option value="JD50">Jump Index 50</option>
+            <option value="JD75">Jump Index 75</option>
+            <option value="JD100">Jump Index 100</option>
+            <option value="RDBEAR">Bear Market</option>
+            <option value="RDBULL">Bull Market</option>
+          </select>
+          <label for="market" class="color-theme form-label-active">Select a Synthetic Market</label>
+        </div>
+        <div class="form-custom form-label form-icon mb-3">
+          <i class="bi bi-bar-chart-fill font-13"></i>
+          <select class="form-select rounded-xs" id="contract_type" onchange="changeContractType()">
+            <option value="1">Rise/Fall</option>
+            <option value="0" selected>Even/Odd</option>
+            <option value="2">Over/Under</option>
+            <option value="3">Differs/Matches</option>
+          </select>
+          <label for="market" class="color-theme form-label-active">Select Trade Type</label>
+        </div>
+        <div class="row mb-0" id="over_under" style="display:none;">
+          <div class="col-6 pe-2">
+            <div class="form-custom form-label form-icon mb-3">
+              <i class="bi bi-bar-chart-fill font-14"></i>
+              <input type="number" class="form-control rounded-xs" id="over_input" step="1" value="4" min="0" max="9" oninput="over_under()" required />
+              <label for="c1" class="color-theme form-label-active">Over</label>
+              <span>(required)</span>
+            </div>
           </div>
-          <div class="form-custom form-label form-icon mb-3">
-            <i class="bi bi-bar-chart-fill font-13"></i>
-            <select class="form-select rounded-xs" id="contract_type" onchange="changeContractType()">
-              <option value="1">Rise/Fall</option>
-              <option value="0" selected>Even/Odd</option>
-              <option value="2">Over/Under</option>
-              <option value="3">Differs/Matches</option>
-            </select>
-            <label for="market" class="color-theme form-label-active">Select Trade Type</label>
+          <div class="col-6 ps-2">
+            <div class="form-custom form-label form-icon mb-3">
+              <i class="bi bi-bar-chart-fill font-14"></i>
+              <input type="number" class="form-control rounded-xs" id="under_input" step="1" value="5" min="0" max="9" oninput="over_under()" required />
+              <label for="c1" class="color-theme form-label-active">Under</label>
+              <span>(required)</span>
+            </div>
           </div>
-          <div class="row mb-0" id="over_under" style="display:none;">
-          <!-- <div class="row mb-0"> -->
-      			<div class="col-6 pe-2">
-      				<div class="form-custom form-label form-icon mb-3">
-                <i class="bi bi-bar-chart-fill font-14"></i>
-                <input type="number" class="form-control rounded-xs" id="over_input" step="1" value="4" min="0" max="9" oninput="over_under()" required />
-                <label for="c1" class="color-theme form-label-active">Over</label>
-                <span>(required)</span>
-              </div>
-      			</div>
-      			<div class="col-6 ps-2">
-      				<div class="form-custom form-label form-icon mb-3">
-                <i class="bi bi-bar-chart-fill font-14"></i>
-                <input type="number" class="form-control rounded-xs" id="under_input" step="1" value="5" min="0" max="9" oninput="over_under()" required />
-                <label for="c1" class="color-theme form-label-active">Under</label>
-                <span>(required)</span>
-              </div>
-      			</div>
-      		</div>
-          <div class="form-custom form-label form-icon mb-3">
-            <i class="bi bi-bar-chart-fill font-14"></i>
-            <input type="number" class="form-control rounded-xs" id="ticks" step="1" placeholder='No. of ticks to show' value="120" min="1" max="5000" required />
-            <label for="c1" class="color-theme form-label-active">Number of Ticks</label>
-            <span>(required)</span>
-          </div>
+        </div>
+        <div class="form-custom form-label form-icon mb-3">
+          <i class="bi bi-bar-chart-fill font-14"></i>
+          <input type="number" class="form-control rounded-xs" id="ticks" step="1" placeholder='No. of ticks to show' value="120" min="1" max="5000" required />
+          <label for="c1" class="color-theme form-label-active">Number of Ticks</label>
+          <span>(required)</span>
+        </div>
         <h1 align="center">
           <b id="current" class="text-primary">0</b>
         </h1>
         <div class="row mb-0">
           <div id="last_ticks_row" style="display: none; text-align: center;"></div>
+        </div>
       </div>
-      </div>
-        <div class="row mb-0">
-    			<div class="col-6 pe-0">
-    					<div class="content pb-0">
-    						<h3 align="center" id="even_label">0</h3>
-    					</div>
-    			</div>
-    			<div class="col-6 ps-0">
-    					<div class="content pb-0">
-    						<h3 align="center" id="odd_label">0</h3>
-    					</div>
-    			</div>
-    		</div>
-        <div class="row mb-0">
-          <div class="col-12">
-              <div class="content pb-0">
-                  <h3 align="center">Last 20 Digits Pattern</h3>
-                  <div id="pattern_display" style="font-size: 20px; text-align: center;"></div>
-              </div>
+      <div class="row mb-0 card-style" style="padding: 15px; margin-top: 15px;">
+        <div class="col-6 pe-0">
+          <div class="content pb-0">
+            <h3 align="center" id="even_label">0</h3>
           </div>
-      </div>
-        <input type="hidden" id="even" value="0">
-          <input type="hidden" id="odd" value="0">
-          <input type="hidden" id="rise" value="0">
-          <input type="hidden" id="fall" value="0">
-          <input type="hidden" id="over" value="0">
-          <input type="hidden" id="under" value="0">
-        <input type="hidden" id="digit0" value="0">
-        <input type="hidden" id="digit1" value="0">
-        <input type="hidden" id="digit2" value="0">
-        <input type="hidden" id="digit3" value="0">
-        <input type="hidden" id="digit4" value="0">
-        <input type="hidden" id="digit5" value="0">
-        <input type="hidden" id="digit6" value="0">
-        <input type="hidden" id="digit7" value="0">
-        <input type="hidden" id="digit8" value="0">
-        <input type="hidden" id="digit9" value="0">
-          <input type="hidden" id="previous" value="0">
-          <input type="hidden" id="subid" value="774cbfef-72c8-c8e4-42c5-189e941d2379">
-          <input type="hidden" id="old_ticks" value="10">
-          <input type="hidden" id="token" value="<?php echo $_SESSION['token']; ?>">
-          <!-- CHARTS STARTS HERE -->
-          <div class="body">
-              <canvas id="myChart" width="400px"></canvas>
+        </div>
+        <div class="col-6 ps-0">
+          <div class="content pb-0">
+            <h3 align="center" id="odd_label">0</h3>
           </div>
-          <div class="analysis-guide">
-            <style>
-                table {
-                    border-collapse: collapse;
-                    width: 100%;
-                }
-        
-                th, td {
-                    border: 1px solid black;
-                    padding: 2px;
-                    color: black;
-                    font-weight: 900.;
-                }
-                
-                h4 {
-                    margin-top: 14px;
-                    color: red;
-                }
+        </div>
+      </div>
+      <div class="card-style" style="padding: 15px; margin-top: 15px;">
+        <div class="col-12">
+          <div class="content pb-0">
+            <h3 align="center">Last 20 Digits Pattern</h3>
+            <div id="pattern_display" style="font-size: 20px; text-align: center;"></div>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="even" value="0">
+      <input type="hidden" id="odd" value="0">
+      <input type="hidden" id="rise" value="0">
+      <input type="hidden" id="fall" value="0">
+      <input type="hidden" id="over" value="0">
+      <input type="hidden" id="under" value="0">
+      <input type="hidden" id="digit0" value="0">
+      <input type="hidden" id="digit1" value="0">
+      <input type="hidden" id="digit2" value="0">
+      <input type="hidden" id="digit3" value="0">
+      <input type="hidden" id="digit4" value="0">
+      <input type="hidden" id="digit5" value="0">
+      <input type="hidden" id="digit6" value="0">
+      <input type="hidden" id="digit7" value="0">
+      <input type="hidden" id="digit8" value="0">
+      <input type="hidden" id="digit9" value="0">
+      <input type="hidden" id="previous" value="0">
+      <input type="hidden" id="subid" value="774cbfef-72c8-c8e4-42c5-189e941d2379">
+      <input type="hidden" id="old_ticks" value="10">
+      <input type="hidden" id="token" value="<?php echo $_SESSION['token']; ?>">
+      
+      <!-- CHARTS STARTS HERE -->
+      <div class="body card-style" style="padding: 15px; margin-top: 15px;">
+        <canvas id="myChart" width="400px"></canvas>
+      </div>
+      
+      <!-- Analysis Guide -->
+      <div class="analysis-guide card-style" style="padding: 15px; margin-top: 15px;">
+        <div class="analysis-container">
+          <style>
+            .analysis-container {
+              font-family: 'Inter', sans-serif;
+              width: 100%;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 20px;
+            }
+            
+            .probability-guide {
+              flex: 1;
+              min-width: 300px;
+              background: white;
+              border-radius: 12px;
+              padding: 20px;
+              box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            }
+            
+            .signal-panel {
+              flex: 1;
+              min-width: 300px;
+              background: white;
+              border-radius: 12px;
+              padding: 20px;
+              box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            }
+            
+            .guide-title {
+              text-align: center;
+              font-size: 18px;
+              color: #2c3e50;
+              margin-bottom: 20px;
+              font-weight: 700;
+              padding-bottom: 10px;
+              border-bottom: 1px solid #eee;
+            }
+            
+            .probability-table {
+              width: 100%;
+              border-collapse: separate;
+              border-spacing: 0;
+              margin: 15px 0;
+              border-radius: 8px;
+              overflow: hidden;
+            }
+            
+            .probability-table th, 
+            .probability-table td {
+              padding: 12px;
+              text-align: center;
+              border: 1px solid #e0e6ed;
+            }
+            
+            .probability-table th {
+              background-color: #3498db;
+              color: white;
+              font-weight: 600;
+              border-color: #2980b9;
+            }
+            
+            .probability-table tr:nth-child(even) {
+              background-color: #f8fafc;
+            }
+            
+            .probability-table tr:hover {
+              background-color: #f1f5f9;
+            }
+            
+            .high-prob {
+              color: #27ae60;
+              font-weight: 700;
+            }
+            
+            .med-prob {
+              color: #f39c12;
+              font-weight: 700;
+            }
+            
+            .low-prob {
+              color: #e74c3c;
+              font-weight: 700;
+            }
+            
+            /* Signal styles */
+            .signal {
+              padding: 15px;
+              margin: 12px 0;
+              border-radius: 8px;
+              display: none;
+              align-items: center;
+              background: rgba(39, 174, 96, 0.1);
+              border-left: 4px solid #27ae60;
+              animation: fadeIn 0.4s ease;
+              transition: all 0.3s ease;
+            }
+            
+            .signal.active {
+              display: flex;
+              box-shadow: 0 2px 10px rgba(39, 174, 96, 0.15);
+            }
+            
+            .signal-icon {
+              margin-right: 12px;
+              font-size: 22px;
+              color: #27ae60;
+            }
+            
+            .signal-content {
+              flex: 1;
+            }
+            
+            .signal-title {
+              font-weight: 700;
+              color: #27ae60;
+              margin-bottom: 4px;
+              font-size: 15px;
+            }
+            
+            .signal-desc {
+              font-size: 13px;
+              color: #4a5568;
+            }
+            
+            .no-signals {
+              text-align: center;
+              color: #718096;
+              font-style: italic;
+              padding: 25px;
+              background: #f8f9fa;
+              border-radius: 8px;
+              margin: 15px 0;
+            }
+            
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(8px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes pulse {
+              0% { transform: scale(1); }
+              50% { transform: scale(1.03); }
+              100% { transform: scale(1); }
+            }
+            
+            .pulse {
+              animation: pulse 1.2s infinite;
+            }
+            
+            .highlight {
+              background-color: rgba(39, 174, 96, 0.15) !important;
+              box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.25);
+              position: relative;
+            }
+            
+            .highlight::after {
+              content: "✓";
+              position: absolute;
+              top: -8px;
+              right: -8px;
+              width: 20px;
+              height: 20px;
+              background: #27ae60;
+              color: white;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 12px;
+              font-weight: bold;
+            }
+          </style>
 
-            </style>
-
-<div class="analysis-container">
-  <style>
-      .analysis-container {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 20px;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px;
-      }
-      
-      .probability-guide {
-          flex: 1;
-          min-width: 400px;
-          background: #f8f9fa;
-          border-radius: 10px;
-          padding: 20px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      }
-      
-      .signal-panel {
-          flex: 1;
-          min-width: 400px;
-          background: #fff;
-          border-radius: 10px;
-          padding: 20px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      }
-      
-      .guide-title {
-          text-align: center;
-          font-size: 18px;
-          color: #333;
-          margin-bottom: 20px;
-          font-weight: 600;
-          padding-bottom: 10px;
-          border-bottom: 1px solid #eee;
-      }
-      
-      .probability-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 15px 0;
-      }
-      
-      .probability-table th, 
-      .probability-table td {
-          padding: 10px;
-          text-align: center;
-          border: 1px solid #ddd;
-      }
-      
-      .probability-table th {
-          background-color: #343a40;
-          color: white;
-          font-weight: 600;
-      }
-      
-      .probability-table tr:nth-child(even) {
-          background-color: #f9f9f9;
-      }
-      
-      .probability-table tr:hover {
-          background-color: #f1f1f1;
-      }
-      
-      .high-prob {
-          color: #28a745;
-          font-weight: 600;
-      }
-      
-      .med-prob {
-          color: #ffc107;
-          font-weight: 600;
-      }
-      
-      .low-prob {
-          color: #dc3545;
-          font-weight: 600;
-      }
-      
-      /* Signal styles */
-      .signal {
-          padding: 12px;
-          margin: 10px 0;
-          border-radius: 5px;
-          display: none;
-          align-items: center;
-          background: rgba(40, 167, 69, 0.1);
-          border-left: 4px solid #28a745;
-          animation: fadeIn 0.5s ease;
-      }
-      
-      .signal.active {
-          display: flex;
-      }
-      
-      .signal-icon {
-          margin-right: 12px;
-          font-size: 20px;
-          color: #28a745;
-      }
-      
-      .signal-content {
-          flex: 1;
-      }
-      
-      .signal-title {
-          font-weight: 700;
-          color: #28a745;
-          margin-bottom: 3px;
-      }
-      
-      .signal-desc {
-          font-size: 13px;
-          color: #495057;
-      }
-      
-      .no-signals {
-          text-align: center;
-          color: #6c757d;
-          font-style: italic;
-          padding: 20px;
-      }
-      
-      @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); }
-      }
-      
-      @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-          100% { transform: scale(1); }
-      }
-      
-      .pulse {
-          animation: pulse 1.5s infinite;
-      }
-      
-      .highlight {
-          background-color: rgba(40, 167, 69, 0.15) !important;
-          box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.3);
-      }
-  </style>
-
-  <!-- Probability Guide Table -->
-  <div class="probability-guide">
-      <div class="guide-title">Probability Guide Table</div>
-      
-      <table class="probability-table">
-          <thead>
-              <tr>
+          <!-- Probability Guide Table -->
+          <div class="probability-guide">
+            <div class="guide-title">Probability Guide Table</div>
+            
+            <table class="probability-table">
+              <thead>
+                <tr>
                   <th>Type</th>
                   <th>1</th>
                   <th>2</th>
@@ -336,10 +361,10 @@
                   <th>6</th>
                   <th>7</th>
                   <th>8</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
                   <td><strong>OVER</strong></td>
                   <td class="high-prob">90%</td>
                   <td class="high-prob">85%</td>
@@ -349,8 +374,8 @@
                   <td class="low-prob">40%</td>
                   <td class="low-prob">30%</td>
                   <td class="low-prob">25%</td>
-              </tr>
-              <tr>
+                </tr>
+                <tr>
                   <td><strong>UNDER</strong></td>
                   <td class="low-prob">25%</td>
                   <td class="low-prob">30%</td>
@@ -360,223 +385,309 @@
                   <td class="med-prob">70%</td>
                   <td class="high-prob">85%</td>
                   <td class="high-prob">90%</td>
-              </tr>
-          </tbody>
-      </table>
-      
-      <table class="probability-table" style="margin-top: 25px;">
-          <thead>
-              <tr>
+                </tr>
+              </tbody>
+            </table>
+            
+            <table class="probability-table" style="margin-top: 25px;">
+              <thead>
+                <tr>
                   <th>Even</th>
                   <th>Odd</th>
                   <th>Rise</th>
                   <th>Fall</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
                   <td class="high-prob">65%</td>
                   <td class="high-prob">65%</td>
                   <td class="high-prob">65%</td>
                   <td class="high-prob">65%</td>
-              </tr>
-          </tbody>
-      </table>
-  </div>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-  <!-- Signal Panel -->
-  <div class="signal-panel">
-      <div class="guide-title">Active Signals</div>
-      
-      <div class="no-signals" id="no-signals">No active signals detected</div>
-      
-      <!-- Over Signals -->
-      <div class="signal" id="over-1-signal">
-          <div class="signal-icon">✓</div>
-          <div class="signal-content">
-              <div class="signal-title">OVER 1 Signal</div>
-              <div class="signal-desc">90% probability condition met</div>
+          <!-- Signal Panel -->
+          <div class="signal-panel">
+            <div class="guide-title">Active Signals</div>
+            
+            <div class="no-signals" id="no-signals">No active signals detected</div>
+            
+            <!-- Over Signals -->
+            <div class="signal" id="over-1-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">OVER 1 Signal</div>
+                <div class="signal-desc">90% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="over-2-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">OVER 2 Signal</div>
+                <div class="signal-desc">85% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="over-3-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">OVER 3 Signal</div>
+                <div class="signal-desc">70% probability condition met</div>
+              </div>
+            </div>
+            
+            <!-- Under Signals -->
+            <div class="signal" id="under-6-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">UNDER 6 Signal</div>
+                <div class="signal-desc">70% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="under-7-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">UNDER 7 Signal</div>
+                <div class="signal-desc">85% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="under-8-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">UNDER 8 Signal</div>
+                <div class="signal-desc">90% probability condition met</div>
+              </div>
+            </div>
+            
+            <!-- Indicator Signals -->
+            <div class="signal" id="even-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">EVEN Signal</div>
+                <div class="signal-desc">65% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="odd-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">ODD Signal</div>
+                <div class="signal-desc">65% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="rise-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">RISE Signal</div>
+                <div class="signal-desc">65% probability condition met</div>
+              </div>
+            </div>
+            
+            <div class="signal" id="fall-signal">
+              <div class="signal-icon">✓</div>
+              <div class="signal-content">
+                <div class="signal-title">FALL Signal</div>
+                <div class="signal-desc">65% probability condition met</div>
+              </div>
+            </div>
           </div>
-      </div>
-      
-      <div class="signal" id="over-2-signal">
-          <div class="signal-icon">✓</div>
-          <div class="signal-content">
-              <div class="signal-title">OVER 2 Signal</div>
-              <div class="signal-desc">85% probability condition met</div>
-          </div>
-      </div>
-      
-      <!-- Under Signals -->
-      <div class="signal" id="under-7-signal">
-          <div class="signal-icon">✓</div>
-          <div class="signal-content">
-              <div class="signal-title">UNDER 7 Signal</div>
-              <div class="signal-desc">85% probability condition met</div>
-          </div>
-      </div>
-      
-      <div class="signal" id="under-8-signal">
-          <div class="signal-icon">✓</div>
-          <div class="signal-content">
-              <div class="signal-title">UNDER 8 Signal</div>
-              <div class="signal-desc">90% probability condition met</div>
-          </div>
-      </div>
-      
-      <!-- Indicator Signals -->
-      <div class="signal" id="even-signal">
-          <div class="signal-icon">✓</div>
-          <div class="signal-content">
-              <div class="signal-title">EVEN Signal</div>
-              <div class="signal-desc">65% probability condition met</div>
-          </div>
-      </div>
-  </div>
 
-  <script>
-      // Market condition thresholds
-      const thresholds = {
-          over: [90, 85, 70, 60, 55, 40, 30, 25],
-          under: [25, 30, 40, 55, 60, 70, 85, 90],
-          indicators: [65, 65, 65, 65] // even, odd, rise, fall
-      };
-      
-      // Current market state (simulated)
-      let marketState = {
-          over: [false, false, false, false, false, false, false, false],
-          under: [false, false, false, false, false, false, false, false],
-          indicators: [false, false, false, false]
-      };
-      
-      // DOM elements
-      const noSignalsElement = document.getElementById('no-signals');
-      const signalElements = {
-          over: [
-              document.getElementById('over-1-signal'),
-              document.getElementById('over-2-signal'),
-              null, null, null, null, null, null
-          ],
-          under: [
-              null, null, null, null, null, null,
-              document.getElementById('under-7-signal'),
-              document.getElementById('under-8-signal')
-          ],
-          indicators: [
-              document.getElementById('even-signal'),
-              null, null, null
-          ]
-      };
-      
-      // Function to update signals
-      function updateSignals() {
-          let anySignalActive = false;
-          
-          // Check over conditions
-          for (let i = 0; i < 8; i++) {
-              if (signalElements.over[i] && marketState.over[i]) {
-                  signalElements.over[i].classList.add('active', 'pulse');
-                  anySignalActive = true;
-              } else if (signalElements.over[i]) {
-                  signalElements.over[i].classList.remove('active', 'pulse');
+          <script>
+            // Market condition thresholds from the guide
+            const guideThresholds = {
+              over: [90, 85, 70, 60, 55, 40, 30, 25],
+              under: [25, 30, 40, 55, 60, 70, 85, 90],
+              indicators: [65, 65, 65, 65] // even, odd, rise, fall
+            };
+            
+            // DOM elements
+            const noSignalsElement = document.getElementById('no-signals');
+            const signalElements = {
+              over: [
+                document.getElementById('over-1-signal'),
+                document.getElementById('over-2-signal'),
+                document.getElementById('over-3-signal'),
+                null, null, null, null, null
+              ],
+              under: [
+                null, null, null, null, null,
+                document.getElementById('under-6-signal'),
+                document.getElementById('under-7-signal'),
+                document.getElementById('under-8-signal')
+              ],
+              indicators: [
+                document.getElementById('even-signal'),
+                document.getElementById('odd-signal'),
+                document.getElementById('rise-signal'),
+                document.getElementById('fall-signal')
+              ]
+            };
+            
+            // Function to calculate market probabilities based on your data
+            function calculateMarketProbabilities() {
+              // Get your actual market data from the hidden inputs
+              const evenCount = parseInt(document.getElementById('even').value) || 0;
+              const oddCount = parseInt(document.getElementById('odd').value) || 0;
+              const riseCount = parseInt(document.getElementById('rise').value) || 0;
+              const fallCount = parseInt(document.getElementById('fall').value) || 0;
+              const totalTicks = parseInt(document.getElementById('ticks').value) || 120;
+              
+              // Get digit counts for Over/Under
+              const digitCounts = [];
+              for (let i = 0; i <= 9; i++) {
+                digitCounts.push(parseInt(document.getElementById('digit' + i).value) || 0);
               }
-          }
-          
-          // Check under conditions
-          for (let i = 0; i < 8; i++) {
-              if (signalElements.under[i] && marketState.under[i]) {
-                  signalElements.under[i].classList.add('active', 'pulse');
-                  anySignalActive = true;
-              } else if (signalElements.under[i]) {
-                  signalElements.under[i].classList.remove('active', 'pulse');
-              }
-          }
-          
-          // Check indicator conditions
-          for (let i = 0; i < 4; i++) {
-              if (signalElements.indicators[i] && marketState.indicators[i]) {
-                  signalElements.indicators[i].classList.add('active', 'pulse');
-                  anySignalActive = true;
-              } else if (signalElements.indicators[i]) {
-                  signalElements.indicators[i].classList.remove('active', 'pulse');
-              }
-          }
-          
-          // Toggle "no signals" message
-          noSignalsElement.style.display = anySignalActive ? 'none' : 'block';
-          
-          // Update table highlights
-          highlightTableCells();
-      }
-      
-      // Highlight corresponding table cells
-      function highlightTableCells() {
-          // Clear all highlights first
-          document.querySelectorAll('.probability-table td').forEach(td => {
-              td.classList.remove('highlight');
-          });
-          
-          // Highlight active signals
-          if (marketState.over[0]) {
-              document.querySelector('.probability-table tr:nth-child(1) td:nth-child(2)').classList.add('highlight');
-          }
-          if (marketState.over[1]) {
-              document.querySelector('.probability-table tr:nth-child(1) td:nth-child(3)').classList.add('highlight');
-          }
-          if (marketState.under[6]) {
-              document.querySelector('.probability-table tr:nth-child(2) td:nth-child(8)').classList.add('highlight');
-          }
-          if (marketState.under[7]) {
-              document.querySelector('.probability-table tr:nth-child(2) td:nth-child(9)').classList.add('highlight');
-          }
-          if (marketState.indicators[0]) {
-              document.querySelector('.probability-table:last-child td:nth-child(1)').classList.add('highlight');
-          }
-      }
-      
-      // Simulate market changes
-      function simulateMarketChanges() {
-          // Randomly activate some signals for demo
-          marketState.over[0] = Math.random() > 0.5; // Over 1
-          marketState.over[1] = Math.random() > 0.6; // Over 2
-          marketState.under[6] = Math.random() > 0.5; // Under 7
-          marketState.under[7] = Math.random() > 0.4; // Under 8
-          marketState.indicators[0] = Math.random() > 0.5; // Even
-          
-          updateSignals();
-      }
-      
-      // Initialize
-      document.addEventListener('DOMContentLoaded', function() {
-          // Run initial update
-          simulateMarketChanges();
-          
-          // Simulate market changes every 3 seconds
-          setInterval(simulateMarketChanges, 3000);
-          
-          // Add hover effects to table cells
-          document.querySelectorAll('.probability-table td').forEach(td => {
-              td.addEventListener('mouseenter', function() {
-                  this.style.transform = 'scale(1.03)';
-                  this.style.transition = 'transform 0.2s ease';
+              
+              // Calculate probabilities
+              const marketProbabilities = {
+                over: [],
+                under: [],
+                indicators: []
+              };
+              
+              // Calculate Over probabilities (digits 0-9)
+              const overThresholds = [1, 2, 3, 4, 5, 6, 7, 8];
+              overThresholds.forEach(threshold => {
+                let count = 0;
+                for (let i = threshold; i <= 9; i++) {
+                  count += digitCounts[i];
+                }
+                marketProbabilities.over.push(Math.round((count / totalTicks) * 100));
               });
               
-              td.addEventListener('mouseleave', function() {
-                  this.style.transform = 'scale(1)';
+              // Calculate Under probabilities (digits 0-9)
+              const underThresholds = [1, 2, 3, 4, 5, 6, 7, 8];
+              underThresholds.forEach(threshold => {
+                let count = 0;
+                for (let i = 0; i < threshold; i++) {
+                  count += digitCounts[i];
+                }
+                marketProbabilities.under.push(Math.round((count / totalTicks) * 100));
               });
-          });
-      });
-  </script>
-</div>
-        
-  			</div>
-  		</div>
-
+              
+              // Calculate indicator probabilities
+              marketProbabilities.indicators.push(Math.round((evenCount / totalTicks) * 100));
+              marketProbabilities.indicators.push(Math.round((oddCount / totalTicks) * 100));
+              marketProbabilities.indicators.push(Math.round((riseCount / totalTicks) * 100));
+              marketProbabilities.indicators.push(Math.round((fallCount / totalTicks) * 100));
+              
+              return marketProbabilities;
+            }
+            
+            // Function to update signals based on actual market data
+            function updateSignals() {
+              const marketProbabilities = calculateMarketProbabilities();
+              let anySignalActive = false;
+              
+              // Check over conditions
+              for (let i = 0; i < 8; i++) {
+                if (signalElements.over[i] && marketProbabilities.over[i] >= guideThresholds.over[i]) {
+                  signalElements.over[i].classList.add('active', 'pulse');
+                  signalElements.over[i].querySelector('.signal-desc').textContent = 
+                    `${marketProbabilities.over[i]}% probability (>= ${guideThresholds.over[i]}%)`;
+                  anySignalActive = true;
+                } else if (signalElements.over[i]) {
+                  signalElements.over[i].classList.remove('active', 'pulse');
+                }
+              }
+              
+              // Check under conditions
+              for (let i = 0; i < 8; i++) {
+                if (signalElements.under[i] && marketProbabilities.under[i] >= guideThresholds.under[i]) {
+                  signalElements.under[i].classList.add('active', 'pulse');
+                  signalElements.under[i].querySelector('.signal-desc').textContent = 
+                    `${marketProbabilities.under[i]}% probability (>= ${guideThresholds.under[i]}%)`;
+                  anySignalActive = true;
+                } else if (signalElements.under[i]) {
+                  signalElements.under[i].classList.remove('active', 'pulse');
+                }
+              }
+              
+              // Check indicator conditions
+              for (let i = 0; i < 4; i++) {
+                if (signalElements.indicators[i] && marketProbabilities.indicators[i] >= guideThresholds.indicators[i]) {
+                  signalElements.indicators[i].classList.add('active', 'pulse');
+                  signalElements.indicators[i].querySelector('.signal-desc').textContent = 
+                    `${marketProbabilities.indicators[i]}% probability (>= ${guideThresholds.indicators[i]}%)`;
+                  anySignalActive = true;
+                } else if (signalElements.indicators[i]) {
+                  signalElements.indicators[i].classList.remove('active', 'pulse');
+                }
+              }
+              
+              // Toggle "no signals" message
+              noSignalsElement.style.display = anySignalActive ? 'none' : 'block';
+              
+              // Update table highlights
+              highlightTableCells(marketProbabilities);
+            }
+            
+            // Highlight corresponding table cells
+            function highlightTableCells(marketProbabilities) {
+              // Clear all highlights first
+              document.querySelectorAll('.probability-table td').forEach(td => {
+                td.classList.remove('highlight');
+              });
+              
+              // Highlight active signals for OVER
+              for (let i = 0; i < 8; i++) {
+                if (signalElements.over[i] && signalElements.over[i].classList.contains('active')) {
+                  const cell = document.querySelector(`.probability-table tr:nth-child(1) td:nth-child(${i+2})`);
+                  if (cell) cell.classList.add('highlight');
+                }
+              }
+              
+              // Highlight active signals for UNDER
+              for (let i = 0; i < 8; i++) {
+                if (signalElements.under[i] && signalElements.under[i].classList.contains('active')) {
+                  const cell = document.querySelector(`.probability-table tr:nth-child(2) td:nth-child(${i+2})`);
+                  if (cell) cell.classList.add('highlight');
+                }
+              }
+              
+              // Highlight active indicators
+              for (let i = 0; i < 4; i++) {
+                if (signalElements.indicators[i] && signalElements.indicators[i].classList.contains('active')) {
+                  const cell = document.querySelector(`.probability-table:last-child td:nth-child(${i+1})`);
+                  if (cell) cell.classList.add('highlight');
+                }
+              }
+            }
+            
+            // Initialize and connect to your data updates
+            document.addEventListener('DOMContentLoaded', function() {
+              // Run initial update
+              updateSignals();
+              
+              // Update signals whenever your market data changes
+              // This should be connected to your actual data update mechanism
+              setInterval(updateSignals, 1000);
+              
+              // Add hover effects to table cells
+              document.querySelectorAll('.probability-table td').forEach(td => {
+                td.addEventListener('mouseenter', function() {
+                  this.style.transform = 'scale(1.03)';
+                  this.style.transition = 'transform 0.2s ease';
+                });
+                
+                td.addEventListener('mouseleave', function() {
+                  this.style.transform = 'scale(1)';
+                });
+              });
+            });
+          </script>
+        </div>
+      </div>
     </div>
-    
-
 </div>
-<!--End of Page ID-->
+
 <script src="scripts/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
@@ -584,3 +695,4 @@
 <script src="script.js?ver=1.1"></script>
 
 </body>
+</html>
