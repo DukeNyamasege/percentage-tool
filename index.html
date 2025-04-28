@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Binarytool Analysis Tool</title>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="fonts/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="styles/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="_manifest.json">
+<meta id="theme-check" name="theme-color" content="#FFFFFF">
+<link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+<script>
+            // Disable right-click
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        function ctrlShiftKey(e, keyCode) {
+        return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+        }
+
+        document.onkeydown = (e) => {
+        // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+        if (
+            event.keyCode === 123 ||
+            ctrlShiftKey(e, 'I') ||
+            ctrlShiftKey(e, 'J') ||
+            ctrlShiftKey(e, 'C') ||
+            (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+        )
+            return false;
+        };
+</script>
+</head>
+
+<body onload="changeMarket()">
+
+<div id="page">
+    <!-- Your Page Content Goes Here-->
+    <div class="page-content header-clear-medium">
+      <div class="content" id="page_content">
+        <br>
+          <div class="form-custom form-label form-icon mb-3">
+            <i class="bi bi-bar-chart-fill font-13"></i>
+            <select class="form-select rounded-xs" id="market" onchange="changeMarket()">
+              <option value="R_10" selected>Volatility 10</option>
+              <option value="1HZ10V">Volatility 10 (1s)</option>
+              <option value="R_25">Volatility 25</option>
+              <option value="1HZ25V">Volatility 25 (1s)</option>
+              <option value="R_50">Volatility 50</option>
+              <option value="1HZ50V">Volatility 50 (1s)</option>
+              <option value="R_75">Volatility 75</option>
+              <option value="1HZ75V">Volatility 75 (1s)</option>
+              <option value="R_100">Volatility 100</option>
+              <option value="1HZ100V">Volatility 100 (1s)</option>
+              <option value="JD10">Jump Index 10</option>
+              <option value="JD25">Jump Index 25</option>
+              <option value="JD50">Jump Index 50</option>
+              <option value="JD75">Jump Index 75</option>
+              <option value="JD100">Jump Index 100</option>
+              <option value="RDBEAR">Bear Market</option>
+              <option value="RDBULL">Bull Market</option>
+            </select>
+            <label for="market" class="color-theme form-label-active">Select a Synthetic Market</label>
+          </div>
+          <div class="form-custom form-label form-icon mb-3">
+            <i class="bi bi-bar-chart-fill font-13"></i>
+            <select class="form-select rounded-xs" id="contract_type" onchange="changeContractType()">
+              <option value="1">Rise/Fall</option>
+              <option value="0" selected>Even/Odd</option>
+              <option value="2">Over/Under</option>
+              <option value="3">Differs/Matches</option>
+            </select>
+            <label for="market" class="color-theme form-label-active">Select Trade Type</label>
+          </div>
+          <div class="row mb-0" id="over_under" style="display:none;">
+          <!-- <div class="row mb-0"> -->
+      			<div class="col-6 pe-2">
+      				<div class="form-custom form-label form-icon mb-3">
+                <i class="bi bi-bar-chart-fill font-14"></i>
+                <input type="number" class="form-control rounded-xs" id="over_input" step="1" value="4" min="0" max="9" oninput="over_under()" required />
+                <label for="c1" class="color-theme form-label-active">Over</label>
+                <span>(required)</span>
+              </div>
+      			</div>
+      			<div class="col-6 ps-2">
+      				<div class="form-custom form-label form-icon mb-3">
+                <i class="bi bi-bar-chart-fill font-14"></i>
+                <input type="number" class="form-control rounded-xs" id="under_input" step="1" value="5" min="0" max="9" oninput="over_under()" required />
+                <label for="c1" class="color-theme form-label-active">Under</label>
+                <span>(required)</span>
+              </div>
+      			</div>
+      		</div>
+          <div class="form-custom form-label form-icon mb-3">
+            <i class="bi bi-bar-chart-fill font-14"></i>
+            <input type="number" class="form-control rounded-xs" id="ticks" step="1" placeholder='No. of ticks to show' value="120" min="1" max="5000" required />
+            <label for="c1" class="color-theme form-label-active">Number of Ticks</label>
+            <span>(required)</span>
+          </div>
+        <h1 align="center">
+          <b id="current" class="text-primary">0</b>
+        </h1>
+        <div class="row mb-0">
+          <div id="last_ticks_row" style="display: none; text-align: center;"></div>
+      </div>
+      </div>
+        <div class="row mb-0">
+    			<div class="col-6 pe-0">
+    					<div class="content pb-0">
+    						<h3 align="center" id="even_label">0</h3>
+    					</div>
+    			</div>
+    			<div class="col-6 ps-0">
+    					<div class="content pb-0">
+    						<h3 align="center" id="odd_label">0</h3>
+    					</div>
+    			</div>
+    		</div>
+        <div class="row mb-0">
+          <div class="col-12">
+              <div class="content pb-0">
+                  <h3 align="center">Last 20 Digits Pattern</h3>
+                  <div id="pattern_display" style="font-size: 20px; text-align: center;"></div>
+              </div>
+          </div>
+      </div>
+        <input type="hidden" id="even" value="0">
+          <input type="hidden" id="odd" value="0">
+          <input type="hidden" id="rise" value="0">
+          <input type="hidden" id="fall" value="0">
+          <input type="hidden" id="over" value="0">
+          <input type="hidden" id="under" value="0">
+        <input type="hidden" id="digit0" value="0">
+        <input type="hidden" id="digit1" value="0">
+        <input type="hidden" id="digit2" value="0">
+        <input type="hidden" id="digit3" value="0">
+        <input type="hidden" id="digit4" value="0">
+        <input type="hidden" id="digit5" value="0">
+        <input type="hidden" id="digit6" value="0">
+        <input type="hidden" id="digit7" value="0">
+        <input type="hidden" id="digit8" value="0">
+        <input type="hidden" id="digit9" value="0">
+          <input type="hidden" id="previous" value="0">
+          <input type="hidden" id="subid" value="774cbfef-72c8-c8e4-42c5-189e941d2379">
+          <input type="hidden" id="old_ticks" value="10">
+          <input type="hidden" id="token" value="<?php echo $_SESSION['token']; ?>">
+          <!-- CHARTS STARTS HERE -->
+          <div class="body">
+              <canvas id="myChart" width="400px"></canvas>
+          </div>
+          <div class="analysis-guide">
+            <style>
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+        
+                th, td {
+                    border: 1px solid black;
+                    padding: 2px;
+                    color: black;
+                    font-weight: 900.;
+                }
+                
+                h4 {
+                    margin-top: 14px;
+                    color: red;
+                }
+
+            </style>
+
+            <span class="text-center" style="font-style: italic; font-size: 16px; color: black;">Guide for Over/Under</span>
+
+
+
+            <h4>OVER</h4>
+            <table>
+                <tr>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                </tr>
+                <tr>
+                    <td>90%</td>
+                    <td>85%</td>
+                    <td>70%</td>
+                    <td>60%</td>
+                    <td>55%</td>
+                    <td>40%</td>
+                    <td>30%</td>
+                    <td>25%</td>
+                </tr>
+            </table>
+        
+            <h4>UNDER</h4>
+            <table>
+                <tr>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>6</th>
+                  <th>7</th>
+                  <th>8</th>
+                </tr>
+                <tr>
+                    <td>25%</td>
+                    <td>30%</td>
+                    <td>40%</td>
+                    <td>55%</td>
+                    <td>60%</td>
+                    <td>70%</td>
+                    <td>85%</td>
+                    <td>90%</td>
+                </tr>
+            </table>
+            <br>
+            <table>
+              <tr>
+                <th>Even</th>
+                <th>Odd</th>
+                <th>Rise</th>
+                <th>Fall</th>
+              </tr>
+              <tr>
+                  <td>Above 65%</td>
+                  <td>Above 65%</td>
+                  <td>Above 65%</td>
+                  <td>Above 65%</td>
+              </tr>
+          </table>
+        </div>
+        
+  			</div>
+  		</div>
+
+    </div>
+    
+
+</div>
+<!--End of Page ID-->
+<script src="scripts/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="script.js?ver=1.1"></script>
+
+</body>
