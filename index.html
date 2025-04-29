@@ -17,10 +17,11 @@
 <style>
   /* Base Responsive Styles */
   body {
-    background: navy;
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
+    background: #0a192f;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    color: #e6f1ff;
   }
   
   .page-content {
@@ -29,12 +30,13 @@
   }
   
   .card-style {
-    background: white;
+    background: #172a45;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    border: 1px solid #1e3a8a;
     overflow: hidden;
     margin-bottom: 15px;
+    color: #e6f1ff;
   }
   
   /* Responsive Typography */
@@ -134,31 +136,33 @@
   .probability-guide {
     flex: 1;
     min-width: 300px;
-    background: white;
+    background: #172a45;
     border-radius: 12px;
     padding: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #1e3a8a;
   }
   
   .signal-panel {
     flex: 1;
     min-width: 300px;
-    background: white;
+    background: #172a45;
     border-radius: 12px;
     padding: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     max-height: 600px;
     overflow-y: auto;
+    border: 1px solid #1e3a8a;
   }
   
   .guide-title {
     text-align: center;
     font-size: 18px;
-    color: #2c3e50;
+    color: #64ffda;
     margin-bottom: 15px;
     font-weight: 700;
     padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #1e3a8a;
   }
   
   .probability-table {
@@ -175,27 +179,27 @@
   .probability-table td {
     padding: 10px;
     text-align: center;
-    border: 1px solid #e0e6ed;
+    border: 1px solid #1e3a8a;
     word-break: break-word;
   }
   
   .probability-table th {
-    background-color: #3498db;
+    background-color: #1e3a8a;
     color: white;
     font-weight: 600;
-    border-color: #2980b9;
+    border-color: #1e3a8a;
   }
   
   .probability-table tr:nth-child(even) {
-    background-color: #f8fafc;
+    background-color: rgba(30, 58, 138, 0.2);
   }
   
   .probability-table tr:hover {
-    background-color: #f1f5f9;
+    background-color: rgba(30, 58, 138, 0.3);
   }
   
   .high-prob {
-    color: #27ae60;
+    color: #64ffda;
     font-weight: 700;
   }
   
@@ -205,7 +209,7 @@
   }
   
   .low-prob {
-    color: #e74c3c;
+    color: #ff6b6b;
     font-weight: 700;
   }
   
@@ -216,21 +220,21 @@
     border-radius: 8px;
     display: none;
     align-items: center;
-    background: rgba(39, 174, 96, 0.1);
-    border-left: 4px solid #27ae60;
+    background: rgba(100, 255, 218, 0.1);
+    border-left: 4px solid #64ffda;
     animation: fadeIn 0.4s ease;
     transition: all 0.3s ease;
   }
   
   .signal.active {
     display: flex;
-    box-shadow: 0 2px 10px rgba(39, 174, 96, 0.15);
+    box-shadow: 0 2px 10px rgba(100, 255, 218, 0.2);
   }
   
   .signal-icon {
     margin-right: 10px;
     font-size: 20px;
-    color: #27ae60;
+    color: #64ffda;
     flex-shrink: 0;
   }
   
@@ -241,7 +245,7 @@
   
   .signal-title {
     font-weight: 700;
-    color: #27ae60;
+    color: #64ffda;
     margin-bottom: 3px;
     font-size: 14px;
     white-space: nowrap;
@@ -251,7 +255,7 @@
   
   .signal-desc {
     font-size: 12px;
-    color: #4a5568;
+    color: #ccd6f6;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -259,12 +263,14 @@
   
   .no-signals {
     text-align: center;
-    color: #718096;
+    color: #ccd6f6;
     font-style: italic;
     padding: 20px;
-    background: #f8f9fa;
+    background: rgba(255, 107, 107, 0.1);
     border-radius: 8px;
     margin: 10px 0;
+    border: 1px dashed #ff6b6b;
+    font-size: 14px;
   }
   
   @keyframes fadeIn {
@@ -283,8 +289,8 @@
   }
   
   .highlight {
-    background-color: rgba(39, 174, 96, 0.15) !important;
-    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.25);
+    background-color: rgba(100, 255, 218, 0.2) !important;
+    box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.4);
     position: relative;
   }
   
@@ -295,8 +301,8 @@
     right: -8px;
     width: 18px;
     height: 18px;
-    background: #27ae60;
-    color: white;
+    background: #64ffda;
+    color: #0a192f;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -312,6 +318,19 @@
   
   .form-select, .form-control {
     width: 100%;
+    background: #172a45;
+    border: 1px solid #1e3a8a;
+    color: #e6f1ff;
+  }
+  
+  .form-select:focus, .form-control:focus {
+    background: #172a45;
+    border-color: #64ffda;
+    color: #e6f1ff;
+  }
+  
+  .form-label-active {
+    color: #64ffda !important;
   }
   
   /* Chart container */
@@ -324,6 +343,44 @@
     width: 100% !important;
     height: auto !important;
     max-height: 300px;
+  }
+  
+  /* Pattern Display Styles */
+  #pattern_display {
+    font-size: 28px;
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin: 15px 0;
+    line-height: 1.4;
+  }
+  
+  .pattern-even {
+    color: #64ffda;
+    font-size: 32px;
+    text-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+  }
+  
+  .pattern-odd {
+    color: #ff6b6b;
+    font-size: 32px;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+  }
+  
+  /* Current Price Display */
+  #current {
+    color: #64ffda;
+    text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+    font-size: 2.5rem;
+  }
+  
+  /* Even/Odd Labels */
+  #even_label {
+    color: #64ffda;
+  }
+  
+  #odd_label {
+    color: #ff6b6b;
   }
 </style>
 <script>
