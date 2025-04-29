@@ -15,13 +15,17 @@
 <meta id="theme-check" name="theme-color" content="#FFFFFF">
 <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
 <style>
+  /* Base Responsive Styles */
   body {
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
     min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
   }
   
   .page-content {
     background-color: transparent !important;
+    padding: 10px;
   }
   
   .card-style {
@@ -30,6 +34,296 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     border: none;
     overflow: hidden;
+    margin-bottom: 15px;
+  }
+  
+  /* Responsive Typography */
+  h1 { font-size: calc(1.5rem + 1vw); }
+  h3 { font-size: calc(1rem + 0.5vw); }
+  
+  /* Responsive Layout Adjustments */
+  @media (max-width: 768px) {
+    .analysis-container {
+      flex-direction: column;
+    }
+    
+    .probability-guide, .signal-panel {
+      min-width: 100%;
+    }
+    
+    .probability-table th, 
+    .probability-table td {
+      padding: 8px 4px;
+      font-size: 12px;
+    }
+    
+    .signal {
+      padding: 10px;
+    }
+    
+    .signal-icon {
+      font-size: 18px;
+    }
+    
+    .signal-title {
+      font-size: 14px;
+    }
+    
+    .signal-desc {
+      font-size: 12px;
+    }
+    
+    #pattern_display {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .form-custom {
+      margin-bottom: 10px;
+    }
+    
+    .probability-table th, 
+    .probability-table td {
+      padding: 6px 3px;
+      font-size: 11px;
+    }
+    
+    .guide-title {
+      font-size: 16px;
+    }
+    
+    #pattern_display {
+      font-size: 14px;
+      word-break: break-all;
+    }
+    
+    /* Stack columns on very small screens */
+    .row.mb-0 > [class*="col-"] {
+      width: 100%;
+      padding: 0;
+    }
+  }
+  
+  /* Special adjustments for landscape phones */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .page-content {
+      padding: 5px;
+    }
+    
+    .card-style {
+      margin-bottom: 10px;
+    }
+    
+    .probability-table th, 
+    .probability-table td {
+      padding: 4px 2px;
+      font-size: 10px;
+    }
+  }
+  
+  /* Analysis Guide Specific Styles */
+  .analysis-container {
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .probability-guide {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+  
+  .signal-panel {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  
+  .guide-title {
+    text-align: center;
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-weight: 700;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .probability-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 10px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    table-layout: fixed;
+  }
+  
+  .probability-table th, 
+  .probability-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #e0e6ed;
+    word-break: break-word;
+  }
+  
+  .probability-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+    border-color: #2980b9;
+  }
+  
+  .probability-table tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  
+  .probability-table tr:hover {
+    background-color: #f1f5f9;
+  }
+  
+  .high-prob {
+    color: #27ae60;
+    font-weight: 700;
+  }
+  
+  .med-prob {
+    color: #f39c12;
+    font-weight: 700;
+  }
+  
+  .low-prob {
+    color: #e74c3c;
+    font-weight: 700;
+  }
+  
+  /* Signal styles */
+  .signal {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    background: rgba(39, 174, 96, 0.1);
+    border-left: 4px solid #27ae60;
+    animation: fadeIn 0.4s ease;
+    transition: all 0.3s ease;
+  }
+  
+  .signal.active {
+    display: flex;
+    box-shadow: 0 2px 10px rgba(39, 174, 96, 0.15);
+  }
+  
+  .signal-icon {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #27ae60;
+    flex-shrink: 0;
+  }
+  
+  .signal-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .signal-title {
+    font-weight: 700;
+    color: #27ae60;
+    margin-bottom: 3px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .signal-desc {
+    font-size: 12px;
+    color: #4a5568;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .no-signals {
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+  
+  .pulse {
+    animation: pulse 1.2s infinite;
+  }
+  
+  .highlight {
+    background-color: rgba(39, 174, 96, 0.15) !important;
+    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.25);
+    position: relative;
+  }
+  
+  .highlight::after {
+    content: "✓";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    background: #27ae60;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  /* Form elements responsiveness */
+  .form-custom {
+    margin-bottom: 12px;
+  }
+  
+  .form-select, .form-control {
+    width: 100%;
+  }
+  
+  /* Chart container */
+  .body {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  #myChart {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 300px;
   }
 </style>
 <script>
@@ -124,6 +418,7 @@
           <div id="last_ticks_row" style="display: none; text-align: center;"></div>
         </div>
       </div>
+      
       <div class="row mb-0 card-style" style="padding: 15px; margin-top: 15px;">
         <div class="col-6 pe-0">
           <div class="content pb-0">
@@ -136,6 +431,7 @@
           </div>
         </div>
       </div>
+      
       <div class="card-style" style="padding: 15px; margin-top: 15px;">
         <div class="col-12">
           <div class="content pb-0">
@@ -144,6 +440,7 @@
           </div>
         </div>
       </div>
+      
       <input type="hidden" id="even" value="0">
       <input type="hidden" id="odd" value="0">
       <input type="hidden" id="rise" value="0">
@@ -173,178 +470,6 @@
       <!-- Analysis Guide -->
       <div class="analysis-guide card-style" style="padding: 15px; margin-top: 15px;">
         <div class="analysis-container">
-          <style>
-            .analysis-container {
-              font-family: 'Inter', sans-serif;
-              width: 100%;
-              display: flex;
-              flex-wrap: wrap;
-              gap: 20px;
-            }
-            
-            .probability-guide {
-              flex: 1;
-              min-width: 300px;
-              background: white;
-              border-radius: 12px;
-              padding: 20px;
-              box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            }
-            
-            .signal-panel {
-              flex: 1;
-              min-width: 300px;
-              background: white;
-              border-radius: 12px;
-              padding: 20px;
-              box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            }
-            
-            .guide-title {
-              text-align: center;
-              font-size: 18px;
-              color: #2c3e50;
-              margin-bottom: 20px;
-              font-weight: 700;
-              padding-bottom: 10px;
-              border-bottom: 1px solid #eee;
-            }
-            
-            .probability-table {
-              width: 100%;
-              border-collapse: separate;
-              border-spacing: 0;
-              margin: 15px 0;
-              border-radius: 8px;
-              overflow: hidden;
-            }
-            
-            .probability-table th, 
-            .probability-table td {
-              padding: 12px;
-              text-align: center;
-              border: 1px solid #e0e6ed;
-            }
-            
-            .probability-table th {
-              background-color: #3498db;
-              color: white;
-              font-weight: 600;
-              border-color: #2980b9;
-            }
-            
-            .probability-table tr:nth-child(even) {
-              background-color: #f8fafc;
-            }
-            
-            .probability-table tr:hover {
-              background-color: #f1f5f9;
-            }
-            
-            .high-prob {
-              color: #27ae60;
-              font-weight: 700;
-            }
-            
-            .med-prob {
-              color: #f39c12;
-              font-weight: 700;
-            }
-            
-            .low-prob {
-              color: #e74c3c;
-              font-weight: 700;
-            }
-            
-            /* Signal styles */
-            .signal {
-              padding: 15px;
-              margin: 12px 0;
-              border-radius: 8px;
-              display: none;
-              align-items: center;
-              background: rgba(39, 174, 96, 0.1);
-              border-left: 4px solid #27ae60;
-              animation: fadeIn 0.4s ease;
-              transition: all 0.3s ease;
-            }
-            
-            .signal.active {
-              display: flex;
-              box-shadow: 0 2px 10px rgba(39, 174, 96, 0.15);
-            }
-            
-            .signal-icon {
-              margin-right: 12px;
-              font-size: 22px;
-              color: #27ae60;
-            }
-            
-            .signal-content {
-              flex: 1;
-            }
-            
-            .signal-title {
-              font-weight: 700;
-              color: #27ae60;
-              margin-bottom: 4px;
-              font-size: 15px;
-            }
-            
-            .signal-desc {
-              font-size: 13px;
-              color: #4a5568;
-            }
-            
-            .no-signals {
-              text-align: center;
-              color: #718096;
-              font-style: italic;
-              padding: 25px;
-              background: #f8f9fa;
-              border-radius: 8px;
-              margin: 15px 0;
-            }
-            
-            @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(8px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-            
-            @keyframes pulse {
-              0% { transform: scale(1); }
-              50% { transform: scale(1.03); }
-              100% { transform: scale(1); }
-            }
-            
-            .pulse {
-              animation: pulse 1.2s infinite;
-            }
-            
-            .highlight {
-              background-color: rgba(39, 174, 96, 0.15) !important;
-              box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.25);
-              position: relative;
-            }
-            
-            .highlight::after {
-              content: "✓";
-              position: absolute;
-              top: -8px;
-              right: -8px;
-              width: 20px;
-              height: 20px;
-              background: #27ae60;
-              color: white;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 12px;
-              font-weight: bold;
-            }
-          </style>
-
           <!-- Probability Guide Table -->
           <div class="probability-guide">
             <div class="guide-title">Probability Guide Table</div>
@@ -389,7 +514,7 @@
               </tbody>
             </table>
             
-            <table class="probability-table" style="margin-top: 25px;">
+            <table class="probability-table" style="margin-top: 15px;">
               <thead>
                 <tr>
                   <th>Even</th>
@@ -680,6 +805,22 @@
                 td.addEventListener('mouseleave', function() {
                   this.style.transform = 'scale(1)';
                 });
+              });
+              
+              // Handle window resize for better mobile experience
+              window.addEventListener('resize', function() {
+                // Adjust table layout on small screens
+                if (window.innerWidth < 768) {
+                  document.querySelectorAll('.probability-table th, .probability-table td').forEach(cell => {
+                    cell.style.padding = '6px 3px';
+                    cell.style.fontSize = '11px';
+                  });
+                } else {
+                  document.querySelectorAll('.probability-table th, .probability-table td').forEach(cell => {
+                    cell.style.padding = '10px';
+                    cell.style.fontSize = '';
+                  });
+                }
               });
             });
           </script>
