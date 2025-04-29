@@ -37,6 +37,103 @@
     margin-bottom: 15px;
   }
   
+  /* Enhanced Form Controls */
+  .form-custom {
+    position: relative;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-label {
+    display: block;
+    position: absolute;
+    left: 15px;
+    top: 12px;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    background: white;
+    padding: 0 5px;
+    border-radius: 4px;
+    z-index: 1;
+  }
+  
+  .form-label-active {
+    top: -8px;
+    font-size: 0.75rem;
+    color: #3498db !important;
+    background: white;
+    z-index: 2;
+  }
+  
+  .form-select, .form-control {
+    width: 100%;
+    padding: 14px 15px;
+    font-size: 0.95rem;
+    border: 2px solid #e0e6ed;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 1;
+  }
+  
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23405261' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+  }
+  
+  .form-select:focus, .form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.2);
+    outline: none;
+  }
+  
+  .form-icon i {
+    position: absolute;
+    right: 15px;
+    top: 14px;
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+  
+  .form-custom:hover i {
+    color: #3498db;
+  }
+  
+  /* Enhanced Prediction Display */
+  #current, #even_label, #odd_label {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  #even_label {
+    color: #27ae60;
+    background: linear-gradient(145deg, #f0fff4 0%, #ffffff 100%);
+  }
+  
+  #odd_label {
+    color: #e74c3c;
+    background: linear-gradient(145deg, #fff5f5 0%, #ffffff 100%);
+  }
+  
   /* Responsive Typography */
   h1 { font-size: calc(1.5rem + 1vw); }
   h3 { font-size: calc(1rem + 0.5vw); }
@@ -76,6 +173,10 @@
     #pattern_display {
       font-size: 16px;
     }
+    
+    .form-select, .form-control {
+      padding: 12px 15px;
+    }
   }
   
   @media (max-width: 576px) {
@@ -103,22 +204,10 @@
       width: 100%;
       padding: 0;
     }
-  }
-  
-  /* Special adjustments for landscape phones */
-  @media (max-height: 500px) and (orientation: landscape) {
-    .page-content {
-      padding: 5px;
-    }
     
-    .card-style {
-      margin-bottom: 10px;
-    }
-    
-    .probability-table th, 
-    .probability-table td {
-      padding: 4px 2px;
-      font-size: 10px;
+    #current, #even_label, #odd_label {
+      font-size: 1.5rem;
+      padding: 10px;
     }
   }
   
@@ -305,15 +394,6 @@
     font-weight: bold;
   }
   
-  /* Form elements responsiveness */
-  .form-custom {
-    margin-bottom: 12px;
-  }
-  
-  .form-select, .form-control {
-    width: 100%;
-  }
-  
   /* Chart container */
   .body {
     width: 100%;
@@ -355,8 +435,8 @@
       <div class="content card-style" id="page_content">
         <br>
         <div class="form-custom form-label form-icon mb-3">
-          <i class="bi bi-bar-chart-fill font-13"></i>
-          <select class="form-select rounded-xs" id="market" onchange="changeMarket()">
+          <i class="bi bi-bar-chart-fill"></i>
+          <select class="form-select" id="market" onchange="changeMarket()">
             <option value="R_10" selected>Volatility 10</option>
             <option value="1HZ10V">Volatility 10 (1s)</option>
             <option value="R_25">Volatility 25</option>
@@ -375,41 +455,38 @@
             <option value="RDBEAR">Bear Market</option>
             <option value="RDBULL">Bull Market</option>
           </select>
-          <label for="market" class="color-theme form-label-active">Select a Synthetic Market</label>
+          <label for="market" class="color-theme form-label">Select a Synthetic Market</label>
         </div>
         <div class="form-custom form-label form-icon mb-3">
-          <i class="bi bi-bar-chart-fill font-13"></i>
-          <select class="form-select rounded-xs" id="contract_type" onchange="changeContractType()">
+          <i class="bi bi-graph-up"></i>
+          <select class="form-select" id="contract_type" onchange="changeContractType()">
             <option value="1">Rise/Fall</option>
             <option value="0" selected>Even/Odd</option>
             <option value="2">Over/Under</option>
             <option value="3">Differs/Matches</option>
           </select>
-          <label for="market" class="color-theme form-label-active">Select Trade Type</label>
+          <label for="contract_type" class="color-theme form-label">Select Trade Type</label>
         </div>
         <div class="row mb-0" id="over_under" style="display:none;">
           <div class="col-6 pe-2">
             <div class="form-custom form-label form-icon mb-3">
-              <i class="bi bi-bar-chart-fill font-14"></i>
-              <input type="number" class="form-control rounded-xs" id="over_input" step="1" value="4" min="0" max="9" oninput="over_under()" required />
-              <label for="c1" class="color-theme form-label-active">Over</label>
-              <span>(required)</span>
+              <i class="bi bi-arrow-up"></i>
+              <input type="number" class="form-control" id="over_input" step="1" value="4" min="0" max="9" oninput="over_under()" required />
+              <label for="over_input" class="color-theme form-label">Over</label>
             </div>
           </div>
           <div class="col-6 ps-2">
             <div class="form-custom form-label form-icon mb-3">
-              <i class="bi bi-bar-chart-fill font-14"></i>
-              <input type="number" class="form-control rounded-xs" id="under_input" step="1" value="5" min="0" max="9" oninput="over_under()" required />
-              <label for="c1" class="color-theme form-label-active">Under</label>
-              <span>(required)</span>
+              <i class="bi bi-arrow-down"></i>
+              <input type="number" class="form-control" id="under_input" step="1" value="5" min="0" max="9" oninput="over_under()" required />
+              <label for="under_input" class="color-theme form-label">Under</label>
             </div>
           </div>
         </div>
         <div class="form-custom form-label form-icon mb-3">
-          <i class="bi bi-bar-chart-fill font-14"></i>
-          <input type="number" class="form-control rounded-xs" id="ticks" step="1" placeholder='No. of ticks to show' value="120" min="1" max="5000" required />
-          <label for="c1" class="color-theme form-label-active">Number of Ticks</label>
-          <span>(required)</span>
+          <i class="bi bi-list-ol"></i>
+          <input type="number" class="form-control" id="ticks" step="1" placeholder=" " value="120" min="1" max="5000" required />
+          <label for="ticks" class="color-theme form-label">Number of Ticks</label>
         </div>
         <h1 align="center">
           <b id="current" class="text-primary">0</b>
@@ -805,22 +882,6 @@
                 td.addEventListener('mouseleave', function() {
                   this.style.transform = 'scale(1)';
                 });
-              });
-              
-              // Handle window resize for better mobile experience
-              window.addEventListener('resize', function() {
-                // Adjust table layout on small screens
-                if (window.innerWidth < 768) {
-                  document.querySelectorAll('.probability-table th, .probability-table td').forEach(cell => {
-                    cell.style.padding = '6px 3px';
-                    cell.style.fontSize = '11px';
-                  });
-                } else {
-                  document.querySelectorAll('.probability-table th, .probability-table td').forEach(cell => {
-                    cell.style.padding = '10px';
-                    cell.style.fontSize = '';
-                  });
-                }
               });
             });
           </script>
